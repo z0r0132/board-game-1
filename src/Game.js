@@ -54,7 +54,7 @@ const isDraw = (cells) => cells.filter((c) => c === null).length === 0;
  * @param {array} cells of cells
  * @returns {Boolean}  return if there is a victory
  */
-function IsVictory(cells) {
+function isVictory(cells) {
   // winning rows, cols or diagonals
   const positions = [
     [0, 1, 2],
@@ -85,10 +85,10 @@ function IsVictory(cells) {
  */
 const endIf = (G, ctx) => {
   const cells = G.cells;
-  if (IsVictory(cells)) {
+  if (isVictory(cells)) {
     return { winner: ctx.currentPlayer };
   }
-  if (IsDraw(cells)) {
+  if (isDraw(cells)) {
     return { draw: true };
   }
 };
