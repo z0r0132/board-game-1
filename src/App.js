@@ -23,7 +23,7 @@ class TicTacToeClient {
       "beforeEnd",
       `
       <div class="header">
-        <div class="score">winner is: <strong></strong></div>
+        <div class="score"> <strong></strong></div>
         <button class="replay">Replay</button>
       </header>      
     `
@@ -80,7 +80,7 @@ class TicTacToeClient {
     if (state.ctx.gameover) {
       messageEl.textContent =
         state.ctx.gameover.winner !== undefined
-          ? "Winner: " + state.ctx.gameover.winner
+          ? "Winner is: " + state.ctx.gameover.winner
           : "Draw!";
       state.ctx.gameover?.cells.forEach((id) =>
         this.rootElement
