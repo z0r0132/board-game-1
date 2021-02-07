@@ -34,7 +34,15 @@ const moves = {
   clickCell,
 };
 
+/**
+ * the turn configuration passing moveLimit to control turns
+ */
+const turn = {
+  moveLimit: 1,
+};
+
 export const TicTacToe = {
   setup,
   moves,
+  turn,
 };
