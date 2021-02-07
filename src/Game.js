@@ -1,0 +1,35 @@
+/**
+ * Setup function to set the initial value of the game state G
+ *
+ * @param {Object} ctx
+ * @returns { Object } initial game state G
+ */
+const setup = (ctx) => {
+  const cells = Array(9).fill(null);
+  return { cells };
+};
+
+/**
+ * ClickCell is the ine of the function move
+ * It mutates the state but without return, so Immer will make
+ * sure to keep it immutable
+ *
+ * @param {Object} G
+ * @param {Object} ctx
+ * @param {Int } id
+ */
+const clickCell = (G, ctx, id) => {
+  G.cells[id] = ctx.currentPlayer;
+};
+
+/**
+ * The moves object needed in boardgame.io
+ */
+const moves = {
+  clickCell,
+};
+
+export const TicTacToe = {
+  setup,
+  moves,
+};
