@@ -88,14 +88,13 @@ function isVictory(cells) {
 const endIf = (G, ctx) => {
   const cells = G.cells;
   if (isVictory(cells) !== undefined) {
-    console.log(isVictory(cells));
     return {
       winner: getPlayerSign(ctx.currentPlayer),
       cells: isVictory(cells),
     };
   }
   if (isDraw(cells)) {
-    return { draw: true };
+    return { draw: true, cells: [] };
   }
 };
 

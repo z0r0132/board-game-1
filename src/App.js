@@ -82,7 +82,7 @@ class TicTacToeClient {
         state.ctx.gameover.winner !== undefined
           ? "Winner: " + state.ctx.gameover.winner
           : "Draw!";
-      state.ctx.gameover.cells.forEach((id) =>
+      state.ctx.gameover?.cells.forEach((id) =>
         this.rootElement
           .querySelector(`[data-id='${id}']`)
           .classList.add("win-cell")
