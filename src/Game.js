@@ -10,6 +10,8 @@ const setup = (ctx) => {
   const cells = Array(9).fill(null);
   return { cells };
 };
+const SIGN = ["X", "O"];
+const getPlayerSign = (player) => SIGN[player];
 
 /**
  * ClickCell is the ine of the function move
@@ -24,7 +26,7 @@ const clickCell = (G, ctx, id) => {
   if (G.cells[id] !== null) {
     return INVALID_MOVE;
   }
-  G.cells[id] = ctx.currentPlayer;
+  G.cells[id] = getPlayerSign(ctx.currentPlayer);
 };
 
 /**
@@ -75,7 +77,7 @@ function isVictory(cells) {
   };
 
   // return tre if at least one isRowComplete check of a position in positions is true
-  return positions.map(isRowComplete).some((i) => i === true);
+  return positions.find(isRowComplete);
 }
 /**
  * EndIf the game end conditions
@@ -85,8 +87,12 @@ function isVictory(cells) {
  */
 const endIf = (G, ctx) => {
   const cells = G.cells;
-  if (isVictory(cells)) {
-    return { winner: ctx.currentPlayer };
+  if (isVictory(cells) !== undefined) {
+    console.log(isVictory(cells));
+    return {
+      winner: getPlayerSign(ctx.currentPlayer),
+      cells: isVictory(cells),
+    };
   }
   if (isDraw(cells)) {
     return { draw: true };

@@ -1,7 +1,7 @@
 import { Client } from "boardgame.io/client";
 import { TicTacToe } from "./Game";
 
-const isDev = () => true;
+const isDev = () => false;
 
 const config = {
   game: TicTacToe,
@@ -10,31 +10,39 @@ const config = {
 
 class TicTacToeClient {
   constructor(rootElement) {
-    this.client = Client({ game: TicTacToe });
+    this.client = Client(config);
     this.client.start();
     this.rootElement = rootElement;
+    this.createHeader();
     this.createBoard();
     this.attachListeners();
     this.client.subscribe((state) => this.update(state));
   }
+  createHeader() {
+    this.rootElement.insertAdjacentHTML(
+      "beforeEnd",
+      `
+      <div class="header">
+        <div class="score">winner is: <strong></strong></div>
+        <button class="replay">Replay</button>
+      </header>      
+    `
+    );
+  }
   createBoard() {
-    // Create cells in rows for the Tic-Tac-Toe board.
-    const rows = [];
-    for (let i = 0; i < 3; i++) {
-      const cells = [];
-      for (let j = 0; j < 3; j++) {
-        const id = 3 * i + j;
-        cells.push(`<td class="cell" data-id="${id}"></td>`);
-      }
-      rows.push(`<tr>${cells.join("")}</tr>`);
+    const cells = [];
+    for (let i = 0; i < 9; i++) {
+      cells.push(`<div class="cell" data-id="${i}"></div>`);
     }
 
     // Add the HTML to our app <div>.
     // We’ll use the empty <p> to display the game winner later.
-    this.rootElement.innerHTML = `
-      <table>${rows.join("")}</table>
-      <p class="winner"></p>
-    `;
+    this.rootElement.insertAdjacentHTML(
+      "beforeEnd",
+      `
+      <div class="container">${cells.join("")}</div>      
+    `
+    );
   }
 
   attachListeners() {
@@ -49,6 +57,13 @@ class TicTacToeClient {
     cells.forEach((cell) => {
       cell.onclick = handleCellClick;
     });
+
+    this.rootElement.querySelector(".replay").onclick = () => {
+      this.rootElement
+        .querySelectorAll(".cell")
+        .forEach((cell) => cell.classList.remove("win-cell"));
+      this.client.reset();
+    };
   }
   update(state) {
     // Get all the board cells.
@@ -60,13 +75,18 @@ class TicTacToeClient {
       cell.textContent = cellValue !== null ? cellValue : "";
     });
     // Get the gameover message element.
-    const messageEl = this.rootElement.querySelector(".winner");
+    const messageEl = this.rootElement.querySelector(".score strong");
     // Update the element to show a winner if any.
     if (state.ctx.gameover) {
       messageEl.textContent =
         state.ctx.gameover.winner !== undefined
           ? "Winner: " + state.ctx.gameover.winner
           : "Draw!";
+      state.ctx.gameover.cells.forEach((id) =>
+        this.rootElement
+          .querySelector(`[data-id='${id}']`)
+          .classList.add("win-cell")
+      );
     } else {
       messageEl.textContent = "";
     }
