@@ -1,4 +1,6 @@
 import { Client } from "boardgame.io/client";
+import { Local } from "boardgame.io/multiplayer";
+import { MCTSBot } from "boardgame.io/ai";
 import { TicTacToe } from "./Game";
 
 const isDev = () => false;
@@ -6,10 +8,18 @@ const isDev = () => false;
 const config = {
   game: TicTacToe,
   debug: isDev(),
+  playerID: "0",
+  matchID: Math.floor(Math.random() * 10000),
+  multiplayer: Local({
+    bots: {
+      1: MCTSBot,
+    },
+  }),
 };
 
 class TicTacToeClient {
   constructor(rootElement) {
+    rootElement.innerHTML = "";
     this.client = Client(config);
     this.client.start();
     this.rootElement = rootElement;
@@ -59,10 +69,7 @@ class TicTacToeClient {
     });
 
     this.rootElement.querySelector(".replay").onclick = () => {
-      this.rootElement
-        .querySelectorAll(".cell")
-        .forEach((cell) => cell.classList.remove("win-cell"));
-      this.client.reset();
+      window.location.reload();
     };
   }
   update(state) {
