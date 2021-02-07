@@ -1,3 +1,5 @@
+import { INVALID_MOVE } from "boardgame.io/core";
+
 /**
  * Setup function to set the initial value of the game state G
  *
@@ -19,6 +21,9 @@ const setup = (ctx) => {
  * @param {Int } id
  */
 const clickCell = (G, ctx, id) => {
+  if (G.cells[id] !== null) {
+    return INVALID_MOVE;
+  }
   G.cells[id] = ctx.currentPlayer;
 };
 
